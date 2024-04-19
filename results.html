@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <div class="resultQuestion"></div>
+      <hr />
+      <h3>Buscar musica por nombre.</h3>
+      <input
+        placeholder="Escribe nombre completo de la musica"
+        type="text"
+        name="search"
+        class="inputText"
+      />
+      <button onclick="onSearch()">Buscar</button>
+      <div class="resultsMusic"></div>
+      <hr />
+    </div>
+
+    <script>
+      musicData = [
+        { artist: "Adele", name: "25", sales: 1731000 },
+        { artist: "Drake", name: "Views", sales: 1608000 },
+        { artist: "Beyonce", name: "Lemonade", sales: 1554000 },
+        { artist: "Chris Stapleton", name: "Traveller", sales: 1085000 },
+        { artist: "Pentatonix", name: "A Pentatonix Christmas", sales: 904000 },
+        {
+          artist: "Original Broadway Cast Recording",
+          name: "Hamilton: An American Musical",
+          sales: 820000,
+        },
+        { artist: "Twenty One Pilots", name: "Blurryface", sales: 738000 },
+        { artist: "Prince", name: "The Very Best of Prince", sales: 668000 },
+        { artist: "Rihanna", name: "Anti", sales: 603000 },
+        { artist: "Justin Bieber", name: "Purpose", sales: 554000 },
+      ];
+
+      const selectedDiv = document.querySelector(".resultQuestion");
+
+      //       1.- Filtrar en un arreglo los álbumes que hayan vendido más de 1’000,000 de copias. Del
+      // arreglo filtrado imprimir para cada elemento del arreglo la siguiente salida
+      selectedDiv.innerHTML += `<h3>Respuesta 1.</h3>`;
+      const question1 = musicData.filter((music) => music.sales > 1000000);
+      question1.forEach((result) => {
+        selectedDiv.innerHTML += `<p>${result.artist} es un gran artista.<p>`;
+      });
+
+      //       2.- Sumar el número de copias vendidas de todos los álbumes y guardarlo en la variable
+      // totalAlbumSales.
+      const totalAlbumSales = musicData.reduce(
+        (total, music) => total + music.sales,
+        0
+      );
+      selectedDiv.innerHTML += `<h3>Respuesta 2.</h3>`;
+      const resultTotalAlbumSales = document.createElement("p");
+      selectedDiv.innerHTML += `<p>${totalAlbumSales} es el total de album vendidas.</p>`;
+
+      //       3.- Crear otro arreglo filtrando sólo los objetos cuyo nombre tenga más de 8 caracteres,
+      // guardarlo en la variable longNames. Mostrar en la página los artistas con el siguiente formato:
+      // “{artist} tiene un nombre muy grande”
+
+      const longNames = musicData.filter((music) => music.name.length > 8);
+      selectedDiv.innerHTML += `<h3>Respuesta 3.</h3>`;
+      longNames.forEach((result) => {
+        selectedDiv.innerHTML += `<p>${result.artist} tiene un nombre muy grande.<p>`;
+      });
+      //       4.- Crear funciones para agregar, borrar y buscar en musicData. La búsqueda deberá hacerse
+      // por nombre y se deberá regresar los objetos encontrados.
+      const handleAddMusic = (music) => {
+        return musicData.push(music);
+      };
+      const handleDeleteMusic = (name) => {
+        return (musicData = musicData.filter((music) => music.artist !== name));
+      };
+      const handleSearchMusic = (name) => {
+        return musicData.filter((music) => music.name === name);
+      };
+
+      //   5.- Con las funciones creadas
+      //   5.1.- Borrar a los artistas Adele, Prince y Justin Bieber
+      handleDeleteMusic("Adele");
+      handleDeleteMusic("Prince");
+      handleDeleteMusic("Justin Bieber");
+
+      //     5.2.- Agregar al artista Radiohead con su álbum Ok Computer que vendió 5,000,000 de copias.
+      // Mostrar el resultado en pantalla.
+      handleAddMusic({
+        artist: "Radiohead",
+        name: "Ok Computer",
+        sales: 5000000,
+      });
+
+      selectedDiv.innerHTML += `<h3>Respuesta 5.2.</h3>`;
+      musicData.forEach((result) => {
+        selectedDiv.innerHTML += `<p>Artista: <strong>${result.name}</strong>.</p>`;
+      });
+
+      //////////////EVENTO BUSCAR Y MOSTRAR EN PANTALLA RESULTADO//////////////////////////////////////////////////////////
+      const resultsMusicDiv = document.querySelector(".resultsMusic");
+
+      const onSearch = () => {
+        const valueSearch = document.querySelector(".inputText").value;
+        const results = handleSearchMusic(valueSearch);
+
+        results.forEach((result) => {
+          resultsMusicDiv.innerHTML += `El álbum <strong>${result.name}</strong> del artista ${result.artist} vendió aproximadamente <strong>${result.sales}</strong> copias.`;
+        });
+      };
+    </script>
+  </body>
+</html>
